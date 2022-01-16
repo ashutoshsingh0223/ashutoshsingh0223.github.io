@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>My Portfolio</title>
+    <title>Ashutosh's Portfolio</title>
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 	<link rel="icon" href="favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet">
@@ -50,7 +50,7 @@
         <div id="lead-content">
             <h1>Ashutosh Singh</h1>
             <h2>Machine Learning Engineer</h2>
-            <a href="#" class="btn-rounded-white">Download Resume</a>
+            <a href="files/resume.pdf" class="btn-rounded-white" target="_blank">Download Resume</a>
         </div>
         <!-- End #lead-content -->
 
@@ -73,9 +73,7 @@
                 </div>
                 <div class="col-md-8">
                     <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur in iaculis ex. Etiam volutpat laoreet urna. Morbi ut tortor nec nulla commodo malesuada sit amet vel lacus. Fusce eget efficitur libero. Morbi dapibus porta quam laoreet placerat. Donec
-                        eu vehicula neque. Donec viverra lorem nunc, tempus euismod eros sollicitudin ut. Quisque et tincidunt libero. Donec id pharetra justo. Proin euismod lacinia dolor, eu scelerisque justo tempus pharetra. Vivamus nunc justo, finibus
-                        ut nisl sed, euismod rhoncus nulla. Proin sed magna egestas, egestas ante et, congue eros. In consequat, mauris dapibus tincidunt suscipit, ex libero aliquet diam, at maximus risus enim non leo.
+                        My areas of interest include Probabilistic Modeling for Natural Language Processing(NLP) and CV Systems & Data Analytics with a focus on the domains of Machine Learning & AI Engineering, Image / Video Analysis
                     </p>
                 </div>
             </div>
@@ -120,7 +118,7 @@
             <span class="education-date">Nov 2020 - Oct 2022</span>
             <h4>Master of Science in Computational Engineering</h4>
             <p>
-               I am pusuing masters in Computational Engineering at FAU. My application field is Information Technology - Digital signal processing. The course is a combination of Mathenatics, Computer Science and Digital Signal Processing. Some of the important courses I have studied/studying listed below.
+               I am pursuing masters in Computational Engineering at FAU. My application field is Information Technology - Digital signal processing. The course is a combination of Mathenatics, Computer Science and Digital Signal Processing. Some of the important courses I have studied/studying listed below.
             </p>
             <ul>
                 <li>
@@ -147,7 +145,7 @@
             <span class="education-date">Nov 2020 - Oct 2022</span>
             <h4>Master of Science in Computational Science</h4>
             <p>
-                I am pusuing masters in Computational Science at USI. I am part of a Double-Degree Programme at FAU and USI. Courses I took at USI
+                I am pursuing masters in Computational Science at USI. I am part of a Double-Degree Programme at FAU and USI. Courses I took at USI
             <ul>
                 <li>
                     Stochastic Methods
@@ -199,35 +197,112 @@
             <div class="row">
                 <div class="project shadow-large">
                     <div class="project-image">
-                        <img src="images/project.jpg" />
+                        <img src="images/fraunhofer.jpg" />
                     </div>
-                    <!-- End .project-image -->
                     <div class="project-info">
-                        <h3>Project Name Here</h3>
+                        <h3>Efficient architectures for Image Segmentation</h3>
                         <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur in iaculis ex. Etiam volutpat laoreet urna. Morbi ut tortor nec nulla commodo malesuada sit amet vel lacus. Fusce eget efficitur libero. Morbi dapibus porta quam laoreet placerat.
+                            Studying and analyzing latest developments in efficient architectures of Image Segmentation.
+                            Project: Create UNet like architectures based on more efficient and sparse architectures like Depth-Wise separable and grouped convolutions.
+                            Goal: Experiment with Atrous Convolutions, Depth-Wise Separable Convolutions, Channel Shuffle, Bottleneck Layers etc to reduce FLOPs while maintaining accuracy of the model.
+
                         </p>
-                        <a href="#">View Project</a>
                     </div>
-                    <!-- End .project-info -->
                 </div>
-                <!-- End .project -->
 
                 <div class="project shadow-large">
                     <div class="project-image">
-                        <img src="images/project.jpg" />
+                        <img src="images/haptik.png" />
                     </div>
-                    <!-- End .project-image -->
                     <div class="project-info">
-                        <h3>Project Name Here</h3>
+                        <h3>Oracle: Diagnostics for Intent Detection</h3>
                         <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur in iaculis ex. Etiam volutpat laoreet urna. Morbi ut tortor nec nulla commodo malesuada sit amet vel lacus. Fusce eget efficitur libero. Morbi dapibus porta quam laoreet placerat.
+                            Oracle was built to make data centric ML development more efficient. It helps data analysts see the problems with the data for intent classification task at Haptik.
+                            Oracle Insights such as "Points of intent(class) overlap" - by analysing the ditribution of prediction probabilities, helped data analysts modify the dataset effectively leading to more accurate results.
                         </p>
-                        <a href="#">View Project</a>
+                    </div>
+                </div>
+                <div class="project shadow-large">
+                    <div class="project-image">
+                        <img src="images/haptik.png" />
+                    </div>
+                    <div class="project-info">
+                        <h3>Sequence Tagging for NER module</h3>
+                        <p>
+                            IVA makes a decision on what the user wants by detecting Intent and Entities from the incoming user-query. I worked on the NER module that Haptik's IVAs use. Multiple experiments were done using BERT encoder with a CRF head on SNIPS custom-intents dataset.
+                            Considering the requirement that the system should be able to detect different types of entites from small, ill-formed sentences we settled with CRF classifer on top of GloVe embeddings. The main problem we faced was that since most entities in our IVAs used be OOVs, in cases when in-vocabulary word(s) appeared in an entity it wasn't recognized.
+                            After a lot of analysis we found the problem was in GloVe vectors where due to very strong representation, the word was almost never classified as an entity. We solved the problem by implementing a dropout like scheme for this embedding vector.
+                        </p>
+                    </div>
+                </div>
+                <div class="project shadow-large">
+                    <div class="project-image">
+                        <img src="images/haptik.png" />
+                    </div>
+
+                    <div class="project-info">
+                        <h3>Domain Classification with Freebase data</h3>
+                        <p>
+                            Domain Classification/Tagging based on entity embeddings.
+                            Parsed 400GB freebase data to extract entities and their definitions/descriptions. 
+                            Finetuned GloVe vectors to include these entities.
+                            Trained  a text classification system using Flair and pooled embeddings to pool BERT outputs with custom GloVe vectors
+                        </p>
+                    </div>
+                </div>
+                <div class="project shadow-large">
+                    <div class="project-image">
+                        <img src="images/haptik.png" />
+                    </div>
+                    <div class="project-info">
+                        <h3>Supervised Short-Text Similarity</h3>
+                        <p>
+                            LSTM and  Bilinear Layer model to interpret semantic similarity between two short excerpts of text( messages in a chat)
+                            It consisted of an LSTM encoder followed by a bilinear-layer(tensor layer). The model was trained on chat data.
+                            Pretrained glove(twitter) embeddings were first fine-tuned on 200MB of textual chat-like data For eg. youtube comments, twitter conversations, daily-dialog, etc. and then used while training the model.
+                            The model was able to differentiate between adversarial sentences like “I love you” and “I hate you”; this is one of the cases where existing(at that time) sentence encoders fail.
+                            This architecture was used to deploy models for Smalltalk/chit chat for 10 languages
+                        </p>
+                        <a href="https://github.com/ashutoshsingh0223/finNLP/blob/develop/tasks/semantic_similarity/tensor_network/ntn.py" target="_blank">View Project</a>
+                    </div>
+                </div>
+                <div class="project shadow-large">
+                    <div class="project-image">
+                        <img src="images/haptik.png" />
+                    </div>
+                    <div class="project-info">
+                        <h3>Paraphrase generation with Variational Autoencoders</h3>
+                        <p>
+                            Variational autoencoder was used to build an architecture proposed by Gupta et al, A Deep Generative Framework for Paraphrase Generation. 
+                            It was trained using quora similar questions dataset.
+                        </p>
+                        <a href="https://github.com/ashutoshsingh0223/deep-paraphrase" target="_blank">View Project</a>
+                    </div>
+                </div>
+                <div class="project shadow-large">
+                    <div class="project-image">
+                        <img src="images/flowgiga.jpg" />
+                    </div>
+                    <div class="project-info">
+                        <h3>Founding flowgiga.com</h3>
+                        <p>
+                            We are trying to help content creators in India monetize their content, either with private delivery channels or finding them the right distributor.
+                        </p>
+                        <a href="https://flowgiga.com" target="_blank">View Project</a>
                     </div>
                     <!-- End .project-info -->
                 </div>
-                <!-- End .project -->
+                <div class="project shadow-large">
+                    <div class="project-image">
+                        <img src="images/jubi.jpg" />
+                    </div>
+                    <div class="project-info">
+                        <h3>IVA Development Platform</h3>
+                        <p>
+                            I co-built the IVA development platform at jubi.ai. The system consisted of modules like text ranking, intent and entity detection.
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
