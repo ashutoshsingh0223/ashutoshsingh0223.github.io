@@ -1,440 +1,379 @@
 <!DOCTYPE html>
-<html class="no-js" lang="en">
-
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Ashutosh's Portfolio</title>
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet">
-    <link rel="stylesheet" href="libs/font-awesome/css/font-awesome.min.css">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/styles.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Computer Vision Portfolio</title>
+
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --accent: #0891b2;
+      --border: #e2e8f0;
+      --dark: #020617;
+      --shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, #f8fafc 0%, #ffffff 55%, #ecfeff 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      width: 100%;
+      display: block;
+    }
+
+    .container {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 28px 0;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 22px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .hero {
+      padding: 72px 0 54px;
+      max-width: 850px;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 8px 14px;
+      margin-bottom: 22px;
+      border-radius: 999px;
+      background: #cffafe;
+      color: #155e75;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    h1 {
+      font-size: clamp(42px, 7vw, 76px);
+      line-height: 0.98;
+      letter-spacing: -0.06em;
+      margin-bottom: 24px;
+    }
+
+    .lead {
+      max-width: 720px;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 24px;
+      margin: 34px 0 28px;
+    }
+
+    .section-label {
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      font-size: clamp(30px, 4vw, 44px);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      padding-bottom: 72px;
+    }
+
+    .project-card {
+      overflow: hidden;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow);
+      border-color: #67e8f9;
+    }
+
+    .project-card img {
+      height: 230px;
+      object-fit: cover;
+    }
+
+    .project-card-content {
+      padding: 24px;
+    }
+
+    .project-tag {
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    h3 {
+      font-size: 24px;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+    }
+
+    .project-card p {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .open-link {
+      display: inline-block;
+      margin-top: 18px;
+      color: var(--dark);
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .about-strip {
+      background: var(--dark);
+      color: white;
+      border-radius: 32px;
+      padding: 34px;
+      margin-bottom: 72px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .about-strip p {
+      color: #cbd5e1;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .stat {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      padding: 18px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 28px;
+    }
+
+    .stat span {
+      color: #cbd5e1;
+      font-size: 13px;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 900px) {
+      .project-grid,
+      .about-strip {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        width: min(100% - 24px, 1120px);
+      }
+
+      nav,
+      .section-header,
+      .about-strip {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav-links {
+        flex-wrap: wrap;
+      }
+
+      .project-grid,
+      .about-strip,
+      .stats {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 
 <body>
-    <div id="mobile-menu-open" class="shadow-large">
-        <i class="fa fa-bars" aria-hidden="true"></i>
-    </div>
-    <!-- End #mobile-menu-toggle -->
-    <header>
-        <div id="mobile-menu-close">
-            <span>Close</span> <i class="fa fa-times" aria-hidden="true"></i>
+  <header class="container">
+    <nav>
+      <a class="logo" href="index.html">Ashutosh Singh</a>
+      <div class="nav-links">
+        <a href="#projects">Projects</a>
+        <a href="cv.pdf">Resume</a>
+        <a href="mailto:ashutosh.singh.de@gmail.com">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="pill">Applied Scientist - Computer Vision</div>
+      <h1>Computer vision systems for real-world data.</h1>
+      <p class="lead">
+        I build applied vision models for object detection, segmentation, 3D perception, low-light imagery, point clouds, and efficient deployment.
+      </p>
+    </section>
+
+    <section class="about-strip">
+      <div>
+        <p class="section-label">Research focus</p>
+        <h2>Detection, segmentation and 3D perception</h2>
+        <p>
+          My work focuses on robust models that handle noisy data, domain shift and limited labels.
+        </p>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <strong>3D</strong>
+          <span>Point-cloud perception</span>
         </div>
-        <ul id="menu" class="shadow">
-            <li>
-                <a href="#about">About</a>
-            </li>
-            <li>
-                <a href="#experience">Experience</a>
-            </li>
-            <li>
-                <a href="#education">Education</a>
-            </li>
-            <li>
-                <a href="#projects">Projects</a>
-            </li>
-            <li>
-                <a href="#skills">Skills</a>
-            </li>
-            <li>
-                <a href="#contact">Contact</a>
-            </li>
-        </ul>
-    </header>
-    <!-- End header -->
-
-    <div id="lead">
-        <div id="lead-content">
-            <h1>Ashutosh Singh</h1>
-            <h2>AI Engineer</h2>
-            <a href="files/resume.pdf" class="btn-rounded-white" target="_blank">Download Resume</a>
+        <div class="stat">
+          <strong>25+</strong>
+          <span>Models trained</span>
         </div>
-        <!-- End #lead-content -->
-
-        <div id="lead-overlay"></div>
-
-        <div id="lead-down">
-            <span>
-                <i class="fa fa-chevron-down" aria-hidden="true"></i>
-            </span>
+        <div class="stat">
+          <strong>Edge</strong>
+          <span>Efficient deployment</span>
         </div>
-        <!-- End #lead-down -->
-    </div>
-    <!-- End #lead -->
+      </div>
+    </section>
 
-    <div id="about">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <h2 class="heading">About Me</h2>
-                </div>
-                <div class="col-md-8">
-                    <p>
-                        My areas of interest include Probabilistic Modeling for Natural Language Processing(NLP) and CV
-                        Systems & Data Analytics with a focus on the domains of Machine Learning & AI Engineering, Image
-                        / Video Analysis
-                    </p>
-                </div>
-            </div>
+    <section id="projects">
+      <div class="section-header">
+        <div>
+          <p class="section-label">Selected projects</p>
+          <h2>Project portfolio</h2>
         </div>
-    </div>
-    <!-- End #about -->
+      </div>
 
-    <div id="experience" class="background-alt">
-        <h2 class="heading">Experience</h2>
-        <div id="experience-timeline">
-            <div data-date="December 2022 – Current">
-                <h3>Fraunhofer Institute of Graphic Data Processing</h3>
-                <h4>Research Associate(Wissenschaftlicher)</h4>
-                <p>
-                    I am a part of Maritime Graphics team at Fraunhofer IGD, Rostock. We are working on problems related
-                    to underwater computer vision and other related areas.
-                </p>
-            </div>
-            <div data-date="November 2021 – November 2022">
-                <h3>Fraunhofer Institute of Integrated Circuits</h3>
-                <h4>Research Assistant @ Multi Modal Human Sensing</h4>
-                <p>
-                    I am part of a team working on making Image Segmentation models lightweight for use in mobile
-                    devices. We mainly work with efficient architectures for Convolutional Neural Networks, network
-                    pruning etc.
-                </p>
-            </div>
-
-            <div data-date="January 2019 – January 2021">
-                <h3>Jio Haptik Technologies Limited</h3>
-                <h4>Machine Learning Engineer</h4>
-                <p>
-                    I was part of ML team at Haptik. I was working with DL Based text classification, supervised
-                    sentence similarity and sequence classification for NER and dialogue management.
-                </p>
-            </div>
-
-            <div data-date="June 2017 – December 2018">
-                <h3>jubi.ai</h3>
-                <h4>Data Scientist</h4>
-                <p>
-                    At jubi.ai I worked on their chatbot development platform. I developed modules like text ranking,
-                    text classification for intent recognition and named entity recognition.
-                </p>
-            </div>
-        </div>
-    </div>
-    <!-- End #experience -->
-
-    <div id="education">
-        <h2 class="heading">Education</h2>
-        <div class="education-block">
-            <h3>University of Erlangen-Nuremberg</h3>
-            <span class="education-date">Nov 2020 - Oct 2022</span>
-            <h4>Master of Science in Computational Engineering</h4>
+      <div class="project-grid">
+        <a class="project-card" href="./projects/wheat_project.html">
+          <img src="images/3d-instance-segmentation.jpg" alt="3D instance segmentation result" />
+          <div class="project-card-content">
+            <p class="project-tag">3D Vision · Point Clouds</p>
+            <h3>3D Instance Segmentation for Plant Phenotyping</h3>
             <p>
-                I am pursuing masters in Computational Engineering at FAU. My application field is Information
-                Technology - Digital signal processing. The course is a combination of Mathenatics, Computer Science and
-                Digital Signal Processing. Some of the important courses I have studied/studying listed below.
+              Segmenting small, crowded, non-rigid objects in 3D point clouds using geometry-aware priors and sparse convolutional networks.
             </p>
-            <ul>
-                <li>
-                    ML and friends: Deep Learning, Machine Learning in Signal Processing, Computer Vision and
-                    Reinforcement Learning
-                </li>
-                <li>
-                    Image and Video Compression
-                </li>
-                <li>
-                    Image and Video Mutlidimnational Signal Processing
-                </li>
-                <li>
-                    Algoritmns in Numerical Linear Algebra
-                </li>
-                <li>
-                    Optmization for Engineers
-                </li>
-            </ul>
-        </div>
-        <!-- End .education-block -->
+            <span class="open-link">Open project →</span>
+          </div>
+        </a>
 
-        <div class="education-block">
-            <h3>Università della Svizzera Italiana</h3>
-            <span class="education-date">Nov 2020 - Oct 2022</span>
-            <h4>Master of Science in Computational Science</h4>
+        <a class="project-card" href="projects/underwater-fish-detection.html">
+          <img src="images/underwater-fish-detection.jpg" alt="Underwater fish detection result" />
+          <div class="project-card-content">
+            <p class="project-tag">Detection · Segmentation</p>
+            <h3>Underwater Fish Detection in Low-Light Images</h3>
             <p>
-                I am pursuing masters in Computational Science at USI. I am part of a Double-Degree Programme at FAU and
-                USI. Courses I took at USI
-            <ul>
-                <li>
-                    Stochastic Methods
-                </li>
-                <li>
-                    Advanced Topics in Machine Learning
-                </li>
-                <li>
-                    High Performance Computing
-                </li>
-                <li>
-                    Introduction to Bayesian Computing
-                </li>
-                <li>
-                    Efficient Computational Algorithms - PLSA
-                </li>
-            </ul>
-        </div>
-
-        <div class="education-block">
-            <h3>KNIT Sultanpur, U.P.</h3>
-            <span class="education-date">Apr 2013 - Apr 2017</span>
-            <h4>Bachelor of Technology in Electronics Engineering</h4>
-            <p>
-                My undregrad was in Electronics Engineering from KNIT, an intitute of Uttar Pradesh Goverment. Below is
-                brief list of the subjects I studied.
+              Robust fish detection and segmentation under poor illumination using semi-supervised learning and domain-aware preprocessing.
             </p>
-            <ul>
-                <li>
-                    Computer Architecture and Organization
-                </li>
-                <li>
-                    Digital Signal Processing
-                </li>
-                <li>
-                    Information Theory
-                </li>
-                <li>
-                    Artifical Neural Networks
-                </li>
-            </ul>
-        </div>
-        <!-- End .education-block -->
-    </div>
-    <!-- End #education -->
+            <span class="open-link">Open project →</span>
+          </div>
+        </a>
 
-    <div id="projects" class="background-alt">
-        <h2 class="heading">Projects</h2>
-        <div class="container">
-            <div class="row">
-                <div class="project shadow-large">
-                    <div class="project-image">
-                        <img src="images/fraunhofer.jpg" />
-                    </div>
-                    <div class="project-info">
-                        <h3>Multimodal Fusion in Affective Computing - Master Thesis</h3>
-                        <p>
-                            Exploring contributions of bio-signals and facial expressions for multi-modal emotion
-                            recognition and developing fusion strategies using deep learning.
-                        </p>
-                        <a href="files/master-thesis-low-res.pdf" target="_blank">Thesis(Low-Res)</a>
-                        <a href="files/master-thesis.pdf" target="_blank">Thesis(High-Res)</a>
-                    </div>
-                </div>
-                <div class="project shadow-large">
-                    <div class="project-image">
-                        <img src="images/fraunhofer.jpg" />
-                    </div>
-                    <div class="project-info">
-                        <h3>Efficient architectures for Image Segmentation</h3>
-                        <p>
-                            Studying and analyzing latest developments in efficient architectures of Image Segmentation.
-                            Project: Create UNet like architectures based on more efficient and sparse architectures
-                            like Depth-Wise separable and grouped convolutions.
-                            Goal: Experiment with Atrous Convolutions, Depth-Wise Separable Convolutions, Channel
-                            Shuffle, Bottleneck Layers etc to reduce FLOPs while maintaining accuracy of the model.
+        <a class="project-card" href="projects/point-query-counting.html">
+          <img src="images/point-query-counting.jpg" alt="Point query object counting result" />
+          <div class="project-card-content">
+            <p class="project-tag">Efficient AI · Counting</p>
+            <h3>Ultra-Light Object Counting with Point Queries</h3>
+            <p>
+              A compact model that predicts one representative point per object, avoiding bounding-box overhead for efficient counting.
+            </p>
+            <span class="open-link">Open project →</span>
+          </div>
+        </a>
+      </div>
+    </section>
+  </main>
 
-                        </p>
-                    </div>
-                </div>
-
-                <div class="project shadow-large">
-                    <div class="project-image">
-                        <img src="images/haptik.png" />
-                    </div>
-                    <div class="project-info">
-                        <h3>Oracle: Diagnostics for Intent Detection</h3>
-                        <p>
-                            Oracle was built to make data centric ML development more efficient. It helps data analysts
-                            see the problems with the data for intent classification task at Haptik.
-                            Oracle Insights such as "Points of intent(class) overlap" - by analysing the ditribution of
-                            prediction probabilities, helped data analysts modify the dataset effectively leading to
-                            more accurate results.
-                        </p>
-                    </div>
-                </div>
-                <div class="project shadow-large">
-                    <div class="project-image">
-                        <img src="images/haptik.png" />
-                    </div>
-                    <div class="project-info">
-                        <h3>Sequence Tagging for NER module</h3>
-                        <p>
-                            IVA makes a decision on what the user wants by detecting Intent and Entities from the
-                            incoming user-query. I worked on the NER module that Haptik's IVAs use. Multiple experiments
-                            were done using BERT encoder with a CRF head on SNIPS custom-intents dataset.
-                            Considering the requirement that the system should be able to detect different types of
-                            entites from small, ill-formed sentences we settled with CRF classifer on top of GloVe
-                            embeddings. The main problem we faced was that since most entities in our IVAs used be OOVs,
-                            in cases when in-vocabulary word(s) appeared in an entity it wasn't recognized.
-                            After a lot of analysis we found the problem was in GloVe vectors where due to very strong
-                            representation, the word was almost never classified as an entity. We solved the problem by
-                            implementing a dropout like scheme for this embedding vector.
-                        </p>
-                    </div>
-                </div>
-                <div class="project shadow-large">
-                    <div class="project-image">
-                        <img src="images/haptik.png" />
-                    </div>
-
-                    <div class="project-info">
-                        <h3>Domain Classification with Freebase data</h3>
-                        <p>
-                            Domain Classification/Tagging based on entity embeddings.
-                            Parsed 400GB freebase data to extract entities and their definitions/descriptions.
-                            Finetuned GloVe vectors to include these entities.
-                            Trained a text classification system using Flair and pooled embeddings to pool BERT outputs
-                            with custom GloVe vectors
-                        </p>
-                    </div>
-                </div>
-                <div class="project shadow-large">
-                    <div class="project-image">
-                        <img src="images/haptik.png" />
-                    </div>
-                    <div class="project-info">
-                        <h3>Supervised Short-Text Similarity</h3>
-                        <p>
-                            LSTM and Bilinear Layer model to interpret semantic similarity between two short excerpts of
-                            text( messages in a chat)
-                            It consisted of an LSTM encoder followed by a bilinear-layer(tensor layer). The model was
-                            trained on chat data.
-                            Pretrained glove(twitter) embeddings were first fine-tuned on 200MB of textual chat-like
-                            data For eg. youtube comments, twitter conversations, daily-dialog, etc. and then used while
-                            training the model.
-                            The model was able to differentiate between adversarial sentences like “I love you” and “I
-                            hate you”; this is one of the cases where existing(at that time) sentence encoders fail.
-                            This architecture was used to deploy models for Smalltalk/chit chat for 10 languages
-                        </p>
-                        <a href="https://github.com/ashutoshsingh0223/finNLP/blob/develop/tasks/semantic_similarity/tensor_network/ntn.py"
-                            target="_blank">View Project</a>
-                    </div>
-                </div>
-                <div class="project shadow-large">
-                    <div class="project-image">
-                        <img src="images/haptik.png" />
-                    </div>
-                    <div class="project-info">
-                        <h3>Paraphrase generation with Variational Autoencoders</h3>
-                        <p>
-                            Variational autoencoder was used to build an architecture proposed by Gupta et al, A Deep
-                            Generative Framework for Paraphrase Generation.
-                            It was trained using quora similar questions dataset.
-                        </p>
-                        <a href="https://github.com/ashutoshsingh0223/deep-paraphrase" target="_blank">View Project</a>
-                    </div>
-                </div>
-                <div class="project shadow-large">
-                    <div class="project-image">
-                        <img src="images/flowgiga.jpg" />
-                    </div>
-                    <div class="project-info">
-                        <h3>Founding flowgiga.com</h3>
-                        <p>
-                            We are trying to help content creators in India monetize their content, either with private
-                            delivery channels or finding them the right distributor.
-                            Apart from leading and managing a team of 4 engineers, for frontend and UI development. I
-                            worked on the backend myself
-                            developing a Content Management Platform using Django framework and a video encoding service
-                            using ffmpeg, bento tools. Deployed the entire
-                            system on AWS ECS and AWS Batch(for encoding jobs).
-                        </p>
-                        <a href="https://flowgiga.com" target="_blank">View Project</a>
-                    </div>
-                    <!-- End .project-info -->
-                </div>
-                <div class="project shadow-large">
-                    <div class="project-image">
-                        <img src="images/jubi.jpg" />
-                    </div>
-                    <div class="project-info">
-                        <h3>IVA Development Platform</h3>
-                        <p>
-                            I co-built the IVA development platform at jubi.ai. The system consisted of modules like
-                            text ranking, intent and entity detection.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End #projects -->
-
-    <div id="skills">
-        <h2 class="heading">Skills</h2>
-        <ul>
-            <li>Python</li>
-            <li>Amazon Web Services</li>
-            <li>Django</li>
-            <li>Django-rest</li>
-            <li>Natural Language Processing</li>
-            <li>Machine Learning</li>
-            <li>Deep Learning</li>
-            <li>Convolutional Neural Networks</li>
-        </ul>
-    </div>
-    <!-- End #skills -->
-
-    <div id="contact">
-        <h2>Get in Touch</h2>
-        <div id="contact-form">
-            <form method="POST" action="https://formspree.io/f/mnqwnepl">
-                <input type="hidden" name="_subject" value="Contact request from personal website" />
-                <input type="email" name="_replyto" placeholder="Your email" required>
-                <textarea name="message" placeholder="Your message" required></textarea>
-                <button type="submit">Send</button>
-            </form>
-        </div>
-        <!-- End #contact-form -->
-    </div>
-    <!-- End #contact -->
-
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-5 copyright">
-                    <p>
-                        Copyright &copy; <span id="current-year">
-                            <script>document.write(new Date().getFullYear())</script>
-                        </span> ASHUTOSH SINGH
-                    </p>
-                </div>
-                <div class="col-sm-2 top">
-                    <span id="to-top">
-                        <i class="fa fa-chevron-up" aria-hidden="true"></i>
-                    </span>
-                </div>
-                <div class="col-sm-5 social">
-                    <ul>
-                        <li>
-                            <a href="https://github.com/ashutoshsingh0223" target="_blank"><i class="fa fa-github"
-                                    aria-hidden="true"></i></a>
-                        </li>
-                        <li>
-                            <a href="https://stackoverflow.com/users/11154976/ashutosh-singh" target="_blank"><i
-                                    class="fa fa-stack-overflow" aria-hidden="true"></i></a>
-                        </li>
-                        <li>
-                            <a href="https://www.linkedin.com/in/ashutosh-singh-0b2694137/" target="_blank"><i
-                                    class="fa fa-linkedin" aria-hidden="true"></i></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <!-- End footer -->
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="js/scripts.min.js"></script>
+  <footer class="container">
+    © 2026 Your Name. Built with simple HTML and CSS.
+  </footer>
 </body>
-
 </html>
+
+<!--
+Recommended file structure:
+
+portfolio/
+├── index.html
+├── project-template.html
+├── cv.pdf
+├── images/
+│   ├── 3d-instance-segmentation.jpg
+│   ├── underwater-fish-detection.jpg
+│   └── point-query-counting.jpg
+└── projects/
+    ├── 3d-instance-segmentation.html
+    ├── underwater-fish-detection.html
+    └── point-query-counting.html
+
+Each project card opens a project-specific page.
+Create each project page by copying project-template.html and replacing text/images/results.
+-->
