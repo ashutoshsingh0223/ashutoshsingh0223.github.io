@@ -149,6 +149,39 @@
       object-fit: cover;
     }
 
+    .pointcloud-viewer {
+      height: 230px;
+      background: radial-gradient(ellipse at center, #0c1a2e 0%, #020617 100%);
+      border-radius: 28px 28px 0 0;
+      overflow: hidden;
+      cursor: grab;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .pointcloud-viewer:active {
+      cursor: grabbing;
+    }
+
+    .pointcloud-viewer canvas {
+      display: block;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .pointcloud-viewer .pcd-loading {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #67e8f9;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      pointer-events: none;
+    }
+
     .project-card-content {
       padding: 24px;
     }
@@ -314,7 +347,7 @@
 
       <div class="project-grid">
         <a class="project-card" href="./projects/wheat_project.html">
-          <img src="images/3d-instance-segmentation.jpg" alt="3D instance segmentation result" />
+          <div class="pointcloud-viewer" data-src="images/wheat_project/instance.pcd"></div>
           <div class="project-card-content">
             <p class="project-tag">3D Vision · Point Clouds</p>
             <h3>3D Instance Segmentation for Plant Phenotyping</h3>
@@ -325,13 +358,38 @@
           </div>
         </a>
 
-        <a class="project-card" href="projects/underwater-fish-detection.html">
-          <img src="images/underwater-fish-detection.jpg" alt="Underwater fish detection result" />
+        <a class="project-card" href="projects/fish_size_measurement.html">
+          <img src="images/fish_size_measurement/stereo-matching.png.jpg" alt="Fish size measurement result" />
           <div class="project-card-content">
-            <p class="project-tag">Detection · Segmentation</p>
-            <h3>Underwater Fish Detection in Low-Light Images</h3>
+            <p class="project-tag">Object Detection · Pose Estimation · Stereo Matching</p>
+            <h3>CV powered Fish Size Measurement Pipeline</h3>
             <p>
-              Robust fish detection and segmentation under poor illumination using semi-supervised learning and domain-aware preprocessing.
+              Pilot project and feasibility study for tracking fish populations in the Baltic Sea using computer vision and multi-object tracking techniques.
+            </p>
+            <span class="open-link">Open project →</span>
+          </div>
+        </a>
+
+        <a class="project-card" href="projects/fish_tracking.html">
+          <img src="images/fish_tracking/1.gif" alt="Underwater fish tracking result" />
+          <div class="project-card-content">
+            <p class="project-tag">Object Detection · Multi-Object Tracking</p>
+            <h3>Fish Tracking for Population Dynamics</h3>
+            <p>
+              Pilot project and feasibility study for tracking fish populations in the Baltic Sea using computer vision and multi-object tracking techniques.
+            </p>
+            <span class="open-link">Open project →</span>
+          </div>
+        </a>
+
+        <a class="project-card" href="projects/dinov2_adaptation.html">
+          <img src="images/dinov2_adaptation/example-1.png" alt="Example Image" />
+          <div class="project-card-content">
+            <p class="project-tag">Foundation Models · Self-Supervised Learning · Zero-Shot Image Classification</p>
+            <h3>Adapting Foundation Models for enhancing Zero-Shot Image Classification</h3>
+            <p>
+              We explore the adaptation of large pre-trained vision models for zero-shot image classification in specialized domain of agricultural fields,
+              demonstrating significant performance improvements without any fine-tuning.
             </p>
             <span class="open-link">Open project →</span>
           </div>
@@ -353,8 +411,94 @@
   </main>
 
   <footer class="container">
-    © 2026 Your Name. Built with simple HTML and CSS.
+    © 2026 Ashutosh Singh. All rights reserved.
   </footer>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.min.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
+    }
+  }
+  </script>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { PCDLoader }      from 'three/addons/loaders/PCDLoader.js';
+    import { OrbitControls }  from 'three/addons/controls/OrbitControls.js';
+
+    function initViewer(container) {
+      const src = container.dataset.src;
+      if (!src) return;
+
+      // Loading label
+      const label = document.createElement('div');
+      label.className = 'pcd-loading';
+      label.textContent = 'Loading point cloud…';
+      container.appendChild(label);
+
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(container.clientWidth, container.clientHeight);
+      container.appendChild(renderer.domElement);
+
+      const scene  = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.001, 1000);
+      camera.position.set(0, 0, 3);
+
+      const controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableDamping   = true;
+      controls.dampingFactor   = 0.07;
+      controls.autoRotate      = true;
+      controls.autoRotateSpeed = 0.8;
+
+      // Stop card navigation when user is dragging / interacting
+      let dragging = false;
+      renderer.domElement.addEventListener('pointerdown', () => { dragging = false; });
+      renderer.domElement.addEventListener('pointermove', () => { dragging = true;  });
+      renderer.domElement.addEventListener('click',       e => { if (dragging) { e.preventDefault(); e.stopPropagation(); } });
+      // Pause auto-rotate while user is orbiting
+      controls.addEventListener('start', () => { controls.autoRotate = false; });
+      controls.addEventListener('end',   () => { controls.autoRotate = true;  });
+
+      const loader = new PCDLoader();
+      loader.load(src, (points) => {
+        label.remove();
+
+        points.geometry.center();
+        points.geometry.computeBoundingSphere();
+        const r = points.geometry.boundingSphere.radius || 1;
+        camera.position.set(0, 0, r * 2.8);
+        controls.update();
+
+        // Tint points cyan to match site accent
+        if (points.material) {
+          points.material.color = new THREE.Color(0x67e8f9);
+          points.material.size  = Math.max(0.002, r * 0.006);
+        }
+
+        scene.add(points);
+      }, undefined, () => { label.textContent = 'Failed to load point cloud'; });
+
+      // Resize
+      const ro = new ResizeObserver(() => {
+        const w = container.clientWidth, h = container.clientHeight;
+        renderer.setSize(w, h);
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+      });
+      ro.observe(container);
+
+      (function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+      })();
+    }
+
+    document.querySelectorAll('.pointcloud-viewer[data-src]').forEach(initViewer);
+  </script>
 </body>
 </html>
 
