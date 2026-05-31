@@ -321,7 +321,7 @@
     <section class="hero">
       <div>
         <div class="tag">3D Instance Segmentation · Volumes of Irregular Shapes · Phenotyping</div>
-        <h1>AI powered Wheat Phenotyping</h1>
+        <h1>Computer Vision powered Wheat Phenotyping</h1>
         <p class="lead">
             We developed a novel 3D instance segmentation model to analyze wheat plant structures from point cloud data.
             Our method achieves state-of-the-art accuracy while being efficient enough for real-world deployment in agricultural settings.
@@ -355,16 +355,17 @@
     <section class="section">
       <h2>Problem Statement</h2>
       <p>
-        Describe the core challenge addressed by this project.
-        Explain why existing methods struggle and what constraints exist in the data.
+        Efficient agricultural practices can be greatly benefited by accurate phenotyping of crops, 
+        which involves measuring traits like size and volume of plant structures. Traditional manual phenotyping is labor-intensive and error-prone, while 2D image-based methods struggle with occlusions and complex geometries. We aim to develop a 3D instance segmentation model that can accurately identify and measure wheat heads from point cloud data, enabling high-throughput phenotyping for improved crop management and breeding.
       </p>
     </section>
 
     <section class="section">
       <h2>Method Overview</h2>
       <p>
-        Explain the architecture, backbone, decoder, losses, augmentations, training strategy,
-        and deployment considerations.
+        We develop a transformer-decoder based architecture, WheatFormer3D, and domain specific augmentations for robust 3D instance segmentation.
+        Our model is designed to be efficient and robust under annotation sparsity, making it suitable for real-world agricultural applications.
+        We also create a novel volume estimation dataset, WheatHeadVol3D, and propose a regression-based approach for accurate volume estimation of irregularly shaped wheat heads.
       </p>
     </section>
 
@@ -395,6 +396,13 @@
 
         <div class="image-card">
           <div class="media-wrap">
+            <img src="../images/wheat_project/WheatFormer3D-graphical_abstract.png" alt="Wheat head size measurement">
+          </div>
+          <p>WheatFormer3D and WheatHeadVol3D pipelines.</p>
+        </div>
+
+        <div class="image-card">
+          <div class="media-wrap">
             <img src="../images/wheat_project/scanning-setup.png" alt="Wheat scanning setup">
           </div>
           <p>3D scanning setup for wheat head reference volumes.</p>
@@ -403,64 +411,170 @@
     </section>
 
     <section class="section">
-      <h2>Quantitative Results</h2>
-
+      <h2>Quantitative Results - 3D Instance Segmentation</h2>
+      <p> Average Precision (AP) metrics computed at various IoU thresholds.
+        For the baselines, we report metrics that are evaluated with their official implementation. Prec50 and Rec50 are missing for Soft
+        Group.</p>
       <div class="table-wrapper">
         <table>
           <thead>
             <tr>
               <th>Method</th>
-              <th>mAP</th>
+              <th>AP25</th>
               <th>AP50</th>
-              <th>Latency</th>
-              <th>Parameters</th>
+              <th>AP</th>
+              <th>Prec50</th>
+              <th>Recall50</th>
             </tr>
           </thead>
 
           <tbody>
             <tr>
-              <td>Baseline CNN</td>
-              <td>68.4</td>
-              <td>81.2</td>
-              <td>74 ms</td>
-              <td>12.3M</td>
+              <td>WheatFormer3D</td>
+              <td>91.19</td>
+              <td>87.96</td>
+              <td>77.99</td>
+              <td>96.14</td>
+              <td>85.38</td>
             </tr>
-
             <tr>
-              <td>Sparse ConvNet</td>
-              <td>73.8</td>
-              <td>85.9</td>
-              <td>51 ms</td>
-              <td>7.1M</td>
+              <td>Oneformer3D</td>
+              <td>80.52</td>
+              <td>76.48</td>
+              <td>65.63</td>
+              <td>96.55</td>
+              <td>73.93</td>
             </tr>
-
             <tr>
-              <td><strong>Proposed Method</strong></td>
-              <td><strong>78.4</strong></td>
-              <td><strong>89.1</strong></td>
-              <td><strong>42 ms</strong></td>
-              <td><strong>1.7M</strong></td>
+              <td>Oneformer3D-P</td>
+              <td><strong>85.99</strong></td>
+              <td><strong>78.21</strong></td>
+              <td><strong>63.24</strong></td>
+              <td><strong>93.87</strong></td>
+              <td><strong>72.87</strong></td>
+            </tr>
+            <tr>
+              <td>Mask3D</td>
+              <td><strong>82.31</strong></td>
+              <td><strong>76.06</strong></td>
+              <td><strong>63.41</strong></td>
+              <td><strong>92.89</strong></td>
+              <td><strong>83.99</strong></td>
+            </tr>
+            <tr>
+              <td>SoftGroup</td>
+              <td><strong>40.84</strong></td>
+              <td><strong>33.08</strong></td>
+              <td><strong>26.86</strong></td>
+              <td>-</td>
+              <td>-</td>
             </tr>
           </tbody>
         </table>
       </div>
+
+      <h2>Quantitative Results - Volume Regression</h2>
+      <p>Volume estimation metrics from WheatHeadVol3D test set for both pooling
+       strategies, max-pooling and transformer-decoder. In-field: Samples from in-field scans of wheat plots.
+      Indoor: Corresponding high-res indoor scans of wheat heads.  MAE in cm<sup>3</sup>.</p>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th rowspan="2">Type</th>
+              <th colspan="2" style="text-align:center">MAE</th>
+              <th colspan="2" style="text-align:center">MAPE</th>
+              <th colspan="2" style="text-align:center">ρ</th>
+            </tr>
+            <tr>
+              <th>In-field</th><th>Indoor</th>
+              <th>In-field</th><th>Indoor</th>
+              <th>In-field</th><th>Indoor</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Max-pooling</td>
+              <td>1.35</td><td>0.22</td>
+              <td>18.19</td><td>4.26</td>
+              <td>0.72</td><td>0.99</td>
+            </tr>
+            <tr>
+              <td>Transformer-decoder</td>
+              <td><strong>0.87</strong></td><td><strong>0.19</strong></td>
+              <td><strong>11.56</strong></td><td><strong>3.71</strong></td>
+              <td><strong>0.81</strong></td><td>0.99</td>
+            </tr>
+            <tr>
+              <td>Convex-hull</td>
+              <td>26.39</td><td>10.20</td>
+              <td>380.16</td><td>187.75</td>
+              <td>0.45</td><td>0.97</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Quantitative Results - Trait Analysis</h2>
+      <p>Measurement results for length (L), width (W), volume (convex-hull) (V)
+      and volume (regression model) (V2). MAE in cm for L and W and cm<sup>3</sup> for V and V2.
+      p-value ≪ 0.001 for all measurements.</p>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th rowspan="2">Score<br>Threshold</th>
+              <th rowspan="2">IoU</th>
+              <th rowspan="2">#<br>Measured</th>
+              <th colspan="4" style="text-align:center">MAE</th>
+              <th colspan="4" style="text-align:center">MAPE</th>
+              <th colspan="4" style="text-align:center">ρ</th>
+            </tr>
+            <tr>
+              <th>L</th><th>W</th><th>V</th><th>V<sub>2</sub></th>
+              <th>L</th><th>W</th><th>V</th><th>V<sub>2</sub></th>
+              <th>L</th><th>W</th><th>V</th><th>V<sub>2</sub></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>0.3</td><td>0.3</td><td>291</td>
+              <td>0.98</td><td>0.13</td><td>1.77</td><td><strong>0.29</strong></td>
+              <td>9.61</td><td>9.99</td><td>24.17</td><td><strong>14.69</strong></td>
+              <td>0.85</td><td>0.54</td><td>0.73</td><td><strong>0.78</strong></td>
+            </tr>
+            <tr>
+              <td>0.5</td><td>0.5</td><td>273</td>
+              <td>0.89</td><td>0.11</td><td>1.57</td><td><strong>0.26</strong></td>
+              <td>8.66</td><td>9.00</td><td>22.59</td><td><strong>12.80</strong></td>
+              <td>0.86</td><td>0.57</td><td>0.75</td><td><strong>0.82</strong></td>
+            </tr>
+            <tr>
+              <td>0.7</td><td>0.7</td><td>234</td>
+              <td>0.80</td><td>0.08</td><td>1.23</td><td><strong>0.24</strong></td>
+              <td>7.48</td><td>5.82</td><td>13.66</td><td><strong>11.20</strong></td>
+              <td>0.88</td><td>0.62</td><td>0.87</td><td><strong>0.84</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
     </section>
 
     <section class="section">
       <h2>Key Contributions</h2>
 
       <ul>
-        <li>Geometry-aware instance grouping for dense scenes.</li>
-        <li>Efficient deployment-friendly architecture.</li>
-        <li>Robust training under annotation sparsity.</li>
-        <li>Improved inference speed with competitive accuracy.</li>
+        <li>Domain specific augmentations to simulate in-field/environmental conditions.</li>
+        <li>First reference volume dataset for wheat heads, WheatHeadVol3D.</li>
+        <li>Masked-FPS for more targeted query coverage.</li>
       </ul>
     </section>
   </main>
 
   <footer>
     <div class="container">
-      © 2026 Your Name. Built with simple HTML and CSS.
+      © 2026 Ashutosh Singh. All rights reserved.
     </div>
   </footer>
 

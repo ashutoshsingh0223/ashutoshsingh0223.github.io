@@ -398,7 +398,7 @@
 
     <section class="section">
       <h2>Quantitative Results - Object Detection</h2>
-
+      <p>mAP values for object detection methods on our dataset with Faster R-CNN-R50 and R101 backbones.</p>
       <div class="table-wrapper">
         <table>
           <thead>
@@ -429,7 +429,7 @@
       </div>
 
       <h2>Quantitative Results - Pose Estimation (top-down)</h2>
-
+        <p>AP values for pose estimation methods on our dataset with HRNet-32 and Hourglass-52 backbones.</p>
       <div class="table-wrapper">
         <table>
           <thead>
@@ -460,7 +460,7 @@
       </div>
 
       <h2>Quantitative Results - Fish association for Stereo Matching</h2>
-
+        <p>Precision and Recall values for fish association across left and right frames on our dataset.</p>
       <div class="table-wrapper">
         <table>
           <thead>
@@ -487,36 +487,10 @@
         </table>
       </div>
 
-      <h2>Quantitative Results - Fish association for Stereo Matching</h2>
-
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>Method</th>
-              <th>Precision</th>
-              <th>Recall</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr>
-              <td>Best-Match</td>
-              <td>81.36</td>
-              <td>77.38</td>
-            </tr>
-
-            <tr>
-              <td>Minimum Cost Assignment</td>
-              <td>90.19</td>
-              <td>82.31</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      
 
       <h2>Quantitative Results - Length measurement Errors</h2>
-
+        <p>Length measurement errors for different methods of depth estimation at keypoints. We use ground-truth depth and estimated depths at the keypoints to calculate the errors.</p>
       <div class="table-wrapper">
         <table>
           <thead>
@@ -549,10 +523,9 @@
       <h2></h2>
 
       <ul>
-        <li>Geometry-aware instance grouping for dense scenes.</li>
-        <li>Efficient deployment-friendly architecture.</li>
-        <li>Robust training under annotation sparsity.</li>
-        <li>Improved inference speed with competitive accuracy.</li>
+        <li>Underwater object detection and pose estimation.</li>
+        <li>Keypoints from pose estimation used for stereo matching.</li>
+        <li>Depth estimation at keypoints and length measurement.</li>
       </ul>
     </section>
   </main>
