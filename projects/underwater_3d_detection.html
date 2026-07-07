@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Project Title</title>
+  <title>Underwater 3D Detection</title>
 
   <style>
     :root {
@@ -353,16 +353,25 @@
     <section class="section">
       <h2>Problem Statement</h2>
       <p>
-        Describe the core challenge addressed by this project.
-        Explain why existing methods struggle and what constraints exist in the data.
+        Maritime security increasingly depends on understanding submerged environments: inspecting infrastructure, detecting hazardous 
+        or suspicious objects, and monitoring ports or offshore assets. 
+        Sonar is robust and long-range, but it often lacks the spatial 
+        resolution needed for fine object-level inspection.
+        Underwater laser scanning can provide dense 3D geometry, 
+        but the challenge is: how do we automatically interpret this data?
+        A major bottleneck is that underwater data is expensive and difficult to collect. 
+        In many scans, there may be only one or two relevant objects. This makes training deep learning models unstable and reduces recall. 
+
+
       </p>
     </section>
 
     <section class="section">
       <h2>Method Overview</h2>
       <p>
-        Explain the architecture, backbone, decoder, losses, augmentations, training strategy,
-        and deployment considerations.
+        We benchmark transformer-decoder based instance segmentation methods on underwater laser derived point clouds.
+        To address the object sparsity problem, we proposed a geometry-aware augmentation strategy: CAD-derived synthetic objects are inserted into real scenes, aligned to support surfaces, 
+        and checked for intersections so that the augmented scenes remain physically plausible.
       </p>
     </section>
 
@@ -372,93 +381,96 @@
       <div class="image-grid">
         <div class="image-card">
           <div class="media-wrap">
-            <div class="pointcloud-viewer" data-src="../images/wheat_project/instance.pcd"></div>
+            <img src="../images/underwater_3d_detection/scanner.png">
           </div>
-          <p>3D Instance Segmentation Result</p>
+          <p>Sensor setup for underwater laser scanning in an indoor environment for prototype development.</p>
         </div>
 
         <div class="image-card">
           <div class="media-wrap">
-            <div class="pointcloud-viewer" data-src="../images/wheat_project/semantic.pcd"></div>
+            <img src="../images/underwater_3d_detection/object-insertion.png">
           </div>
-          <p>3D Semantic Segmentation Result</p>
+          <p>CAD-derived synthetic objects inserted into real scenes for data augmentation.</p>
         </div>
 
         <div class="image-card">
           <div class="media-wrap">
-            <img src="../images/wheat_project/measurement.png" alt="Wheat head size measurement">
+            <img src="../images/underwater_3d_detection/Simulate-sensor-patterns.png">
           </div>
-          <p>Wheat head size measurement</p>
+          <p>Simulated sensor to sample point clouds from CAD models as opposed to uniform sampling.</p>
         </div>
 
         <div class="image-card">
           <div class="media-wrap">
-            <img src="../images/wheat_project/scanning-setup.png" alt="Wheat scanning setup">
+            <img src="../images/underwater_3d_detection/GT_and_detections.png">
           </div>
-          <p>3D scanning setup for wheat head reference volumes.</p>
+          <p>Results for 3D instance segmentation. Ground truth annotations are shown on the left and right respectively.</p>
         </div>
       </div>
     </section>
 
     <section class="section">
-      <h2>Quantitative Results</h2>
-
+      <h2>Quantitative Results - 3D Instance Segmentation</h2>
+      <p> Average Precision (AP) metrics computed at various IoU thresholds.
+        For the baselines, we report metrics that are evaluated with their official implementation.</p>
       <div class="table-wrapper">
         <table>
           <thead>
             <tr>
               <th>Method</th>
-              <th>mAP</th>
+              <th>AP25</th>
               <th>AP50</th>
-              <th>Latency</th>
-              <th>Parameters</th>
+              <th>AP</th>
+              <th>Prec50</th>
+              <th>Recall50</th>
             </tr>
           </thead>
 
-          <tbody>
+          <tbody> 
             <tr>
-              <td>Baseline CNN</td>
-              <td>68.4</td>
-              <td>81.2</td>
-              <td>74 ms</td>
-              <td>12.3M</td>
+              <td>Oneformer3D</td>
+              <td>42.36</td>
+              <td>18.21</td>
+              <td>6.21</td>
+              <td>40.75</td>
+              <td>32.92</td>
             </tr>
-
             <tr>
-              <td>Sparse ConvNet</td>
-              <td>73.8</td>
-              <td>85.9</td>
-              <td>51 ms</td>
-              <td>7.1M</td>
+              <td>Oneformer3D-P</td>
+              <td>55.19</td>
+              <td>28.24</td>
+              <td>10.80</td>
+              <td>61.11</td>
+              <td>55.24</td>
             </tr>
-
             <tr>
-              <td><strong>Proposed Method</strong></td>
-              <td><strong>78.4</strong></td>
-              <td><strong>89.1</strong></td>
-              <td><strong>42 ms</strong></td>
-              <td><strong>1.7M</strong></td>
+              <td>Mask3D</td>
+              <td>35.20</td>
+              <td>20.67</td>
+              <td>17.91</td>
+              <td>51.32</td>
+              <td>38.45</td>
             </tr>
           </tbody>
         </table>
       </div>
+
     </section>
 
     <section class="section">
       <h2>Key Contributions</h2>
 
       <ul>
-        <li>Geometry-aware instance grouping for dense scenes.</li>
-        <li>Efficient deployment-friendly architecture.</li>
-        <li>Robust training under annotation sparsity.</li>
-        <li>Improved inference speed with competitive accuracy.</li>
+        <li>Synthetic object insertion for data augmentation.</li>
+        <li>Simulating sensor for point cloud sampling of synthetic objects.</li>
+        <li>Feasibility study on application of modern algorithms on underwater laser scanning data.</li>
       </ul>
     </section>
   </main>
 
   <footer>
     <div class="container">
-      © 2026 Your Name. Built with simple HTML and CSS.
+      © 2026 Ashutosh Singh. All Rights Reserved.
     </div>
   </footer>
 
