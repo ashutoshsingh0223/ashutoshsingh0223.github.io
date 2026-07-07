@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wheat - 3D Instance Segmentation</title>
+
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --accent: #0891b2;
+      --border: #e2e8f0;
+      --dark: #020617;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1100px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 28px 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 44px;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    .back-link {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 32px;
+      margin-bottom: 42px;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: #cffafe;
+      color: #155e75;
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: clamp(38px, 6vw, 62px);
+      line-height: 0.98;
+      letter-spacing: -0.05em;
+      margin-bottom: 18px;
+    }
+
+    .lead {
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .meta-card,
+    .section,
+    .image-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+    }
+
+    .image-card {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Fixed aspect-ratio wrapper keeps all media areas the same shape
+       regardless of the source image's natural dimensions.
+       object-fit: cover crops images to fill without stretching. */
+    .image-card .media-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      border-radius: 24px 24px 0 0;
+      flex-shrink: 0;
+    }
+
+    .image-card .media-wrap img,
+    .image-card .media-wrap .image-placeholder,
+    .image-card .media-wrap .pointcloud-viewer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
+    }
+
+    /* Images: show fully, preserve aspect ratio, no cropping */
+    .image-card .media-wrap img {
+      object-fit: contain;
+      background: #f1f5f9;
+    }
+
+    .meta-card {
+      padding: 18px;
+    }
+
+    .meta-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .section {
+      padding: 28px;
+      margin-bottom: 28px;
+    }
+
+    h2 {
+      font-size: 30px;
+      margin-bottom: 14px;
+      letter-spacing: -0.03em;
+    }
+
+    p {
+      color: #334155;
+    }
+
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .image-placeholder {
+      background: linear-gradient(135deg, #dbeafe, #cffafe);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      color: #475569;
+    }
+
+    .image-card p {
+      padding: 14px 16px 18px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+      margin-top: 18px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 720px;
+    }
+
+    th,
+    td {
+      border: 1px solid var(--border);
+      padding: 14px 16px;
+      text-align: left;
+    }
+
+    thead {
+      background: #f8fafc;
+    }
+
+    th {
+      font-size: 14px;
+      color: #334155;
+    }
+
+    td {
+      font-size: 14px;
+      color: #475569;
+    }
+
+    ul {
+      padding-left: 20px;
+      color: #475569;
+    }
+
+    li {
+      margin-bottom: 10px;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 0;
+      margin-top: 50px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        width: min(100% - 24px, 1100px);
+      }
+
+      .image-grid,
+      .meta-grid {
+        grid-template-columns: 1fr;
+      }
+
+      nav {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+      }
+    }
+
+    .pointcloud-viewer {
+      background: radial-gradient(ellipse at center, #e1e8f2 0%, #e1e2e6 100%);
+      overflow: hidden;
+      cursor: grab;
+      position: relative;
+      flex-shrink: 0;
+      touch-action: none;
+    }
+
+    .pointcloud-viewer:active {
+      cursor: grabbing;
+    }
+
+    .pointcloud-viewer canvas {
+      display: block;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .pointcloud-viewer .pcd-label {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #67e8f9;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      pointer-events: none;
+    }
+
+    .pointcloud-viewer .pcd-hint {
+      position: absolute;
+      bottom: 10px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: rgba(103,232,249,0.55);
+      font-size: 11px;
+      font-weight: 600;
+      pointer-events: none;
+      transition: opacity 0.4s;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <a class="logo" href="../index.html">Ashutosh Singh</a>
+        <a class="back-link" href="../index.html">← Back to projects</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div>
+        <div class="tag">3D Instance Segmentation · Volumes of Irregular Shapes · Phenotyping</div>
+        <h1>Computer Vision powered Wheat Phenotyping</h1>
+        <p class="lead">
+            We developed a novel 3D instance segmentation model to analyze wheat plant structures from point cloud data.
+            Our method achieves state-of-the-art accuracy while being efficient enough for real-world deployment in agricultural settings.
+            We create a novel volume estimation dataset for accurate wheat head volume estimation.
+        </p>
+      </div>
+
+      <div class="meta-grid">
+        <div class="meta-card">
+          <strong>Dataset</strong>
+          WheatFormer3D Datasets
+        </div>
+
+        <div class="meta-card">
+          <strong>Framework</strong>
+          PyTorch · MMDetection3D
+        </div>
+
+        <div class="meta-card">
+          <strong>Hardware</strong>
+          A100 GPU
+        </div>
+
+        <div class="meta-card">
+          <strong>Task</strong>
+          3D Segmentation · Volume Regression · Object Size Estimation
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Problem Statement</h2>
+      <p>
+        Efficient agricultural practices can be greatly benefited by accurate phenotyping of crops, 
+        which involves measuring traits like size and volume of plant structures. Traditional manual phenotyping is labor-intensive and error-prone, while 2D image-based methods struggle with occlusions and complex geometries. We aim to develop a 3D instance segmentation model that can accurately identify and measure wheat heads from point cloud data, enabling high-throughput phenotyping for improved crop management and breeding.
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>Method Overview</h2>
+      <p>
+        We develop a transformer-decoder based architecture, WheatFormer3D, and domain specific augmentations for robust 3D instance segmentation.
+        Our model is designed to be efficient and robust under annotation sparsity, making it suitable for real-world agricultural applications.
+        We also create a novel volume estimation dataset, WheatHeadVol3D, and propose a regression-based approach for accurate volume estimation of irregularly shaped wheat heads.
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>Visual Results</h2>
+
+      <div class="image-grid">
+        <div class="image-card">
+          <div class="media-wrap">
+            <div class="pointcloud-viewer" data-src="../images/wheat_project/instance.pcd"></div>
+          </div>
+          <p>3D Instance Segmentation Result</p>
+        </div>
+
+        <div class="image-card">
+          <div class="media-wrap">
+            <div class="pointcloud-viewer" data-src="../images/wheat_project/semantic.pcd"></div>
+          </div>
+          <p>3D Semantic Segmentation Result</p>
+        </div>
+
+        <div class="image-card">
+          <div class="media-wrap">
+            <img src="../images/wheat_project/measurement.png" alt="Wheat head size measurement">
+          </div>
+          <p>Wheat head size measurement</p>
+        </div>
+
+        <div class="image-card">
+          <div class="media-wrap">
+            <img src="../images/wheat_project/WheatFormer3D-graphical_abstract.png" alt="Wheat head size measurement">
+          </div>
+          <p>WheatFormer3D and WheatHeadVol3D pipelines.</p>
+        </div>
+
+        <div class="image-card">
+          <div class="media-wrap">
+            <img src="../images/wheat_project/scanning-setup.png" alt="Wheat scanning setup">
+          </div>
+          <p>3D scanning setup for wheat head reference volumes.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Quantitative Results - 3D Instance Segmentation</h2>
+      <p> Average Precision (AP) metrics computed at various IoU thresholds.
+        For the baselines, we report metrics that are evaluated with their official implementation. Prec50 and Rec50 are missing for Soft
+        Group.</p>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Method</th>
+              <th>AP25</th>
+              <th>AP50</th>
+              <th>AP</th>
+              <th>Prec50</th>
+              <th>Recall50</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>WheatFormer3D</td>
+              <td>91.19</td>
+              <td>87.96</td>
+              <td>77.99</td>
+              <td>96.14</td>
+              <td>85.38</td>
+            </tr>
+            <tr>
+              <td>Oneformer3D</td>
+              <td>80.52</td>
+              <td>76.48</td>
+              <td>65.63</td>
+              <td>96.55</td>
+              <td>73.93</td>
+            </tr>
+            <tr>
+              <td>Oneformer3D-P</td>
+              <td><strong>85.99</strong></td>
+              <td><strong>78.21</strong></td>
+              <td><strong>63.24</strong></td>
+              <td><strong>93.87</strong></td>
+              <td><strong>72.87</strong></td>
+            </tr>
+            <tr>
+              <td>Mask3D</td>
+              <td><strong>82.31</strong></td>
+              <td><strong>76.06</strong></td>
+              <td><strong>63.41</strong></td>
+              <td><strong>92.89</strong></td>
+              <td><strong>83.99</strong></td>
+            </tr>
+            <tr>
+              <td>SoftGroup</td>
+              <td><strong>40.84</strong></td>
+              <td><strong>33.08</strong></td>
+              <td><strong>26.86</strong></td>
+              <td>-</td>
+              <td>-</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Quantitative Results - Volume Regression</h2>
+      <p>Volume estimation metrics from WheatHeadVol3D test set for both pooling
+       strategies, max-pooling and transformer-decoder. In-field: Samples from in-field scans of wheat plots.
+      Indoor: Corresponding high-res indoor scans of wheat heads.  MAE in cm<sup>3</sup>.</p>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th rowspan="2">Type</th>
+              <th colspan="2" style="text-align:center">MAE</th>
+              <th colspan="2" style="text-align:center">MAPE</th>
+              <th colspan="2" style="text-align:center">ρ</th>
+            </tr>
+            <tr>
+              <th>In-field</th><th>Indoor</th>
+              <th>In-field</th><th>Indoor</th>
+              <th>In-field</th><th>Indoor</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Max-pooling</td>
+              <td>1.35</td><td>0.22</td>
+              <td>18.19</td><td>4.26</td>
+              <td>0.72</td><td>0.99</td>
+            </tr>
+            <tr>
+              <td>Transformer-decoder</td>
+              <td><strong>0.87</strong></td><td><strong>0.19</strong></td>
+              <td><strong>11.56</strong></td><td><strong>3.71</strong></td>
+              <td><strong>0.81</strong></td><td>0.99</td>
+            </tr>
+            <tr>
+              <td>Convex-hull</td>
+              <td>26.39</td><td>10.20</td>
+              <td>380.16</td><td>187.75</td>
+              <td>0.45</td><td>0.97</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Quantitative Results - Trait Analysis</h2>
+      <p>Measurement results for length (L), width (W), volume (convex-hull) (V)
+      and volume (regression model) (V2). MAE in cm for L and W and cm<sup>3</sup> for V and V2.
+      p-value ≪ 0.001 for all measurements.</p>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th rowspan="2">Score<br>Threshold</th>
+              <th rowspan="2">IoU</th>
+              <th rowspan="2">#<br>Measured</th>
+              <th colspan="4" style="text-align:center">MAE</th>
+              <th colspan="4" style="text-align:center">MAPE</th>
+              <th colspan="4" style="text-align:center">ρ</th>
+            </tr>
+            <tr>
+              <th>L</th><th>W</th><th>V</th><th>V<sub>2</sub></th>
+              <th>L</th><th>W</th><th>V</th><th>V<sub>2</sub></th>
+              <th>L</th><th>W</th><th>V</th><th>V<sub>2</sub></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>0.3</td><td>0.3</td><td>291</td>
+              <td>0.98</td><td>0.13</td><td>1.77</td><td><strong>0.29</strong></td>
+              <td>9.61</td><td>9.99</td><td>24.17</td><td><strong>14.69</strong></td>
+              <td>0.85</td><td>0.54</td><td>0.73</td><td><strong>0.78</strong></td>
+            </tr>
+            <tr>
+              <td>0.5</td><td>0.5</td><td>273</td>
+              <td>0.89</td><td>0.11</td><td>1.57</td><td><strong>0.26</strong></td>
+              <td>8.66</td><td>9.00</td><td>22.59</td><td><strong>12.80</strong></td>
+              <td>0.86</td><td>0.57</td><td>0.75</td><td><strong>0.82</strong></td>
+            </tr>
+            <tr>
+              <td>0.7</td><td>0.7</td><td>234</td>
+              <td>0.80</td><td>0.08</td><td>1.23</td><td><strong>0.24</strong></td>
+              <td>7.48</td><td>5.82</td><td>13.66</td><td><strong>11.20</strong></td>
+              <td>0.88</td><td>0.62</td><td>0.87</td><td><strong>0.84</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <section class="section">
+      <h2>Key Contributions</h2>
+
+      <ul>
+        <li>Domain specific augmentations to simulate in-field/environmental conditions.</li>
+        <li>First reference volume dataset for wheat heads, WheatHeadVol3D.</li>
+        <li>Masked-FPS for more targeted query coverage.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      © 2026 Ashutosh Singh. All rights reserved.
+    </div>
+  </footer>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.min.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
+    }
+  }
+  </script>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { PCDLoader }     from 'three/addons/loaders/PCDLoader.js';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    function initViewer(container) {
+      const src = container.dataset.src;
+      if (!src) return;
+
+      const label = document.createElement('div');
+      label.className = 'pcd-label';
+      label.textContent = 'Loading point cloud…';
+      container.appendChild(label);
+
+      const hint = document.createElement('div');
+      hint.className = 'pcd-hint';
+      hint.textContent = 'Drag to rotate · Scroll to zoom · Right-drag to pan';
+      container.appendChild(hint);
+
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(container.clientWidth, container.clientHeight);
+      container.appendChild(renderer.domElement);
+
+      const scene  = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.001, 1000);
+      camera.position.set(0, 0, 3);
+
+      const controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableDamping   = true;
+      controls.dampingFactor   = 0.07;
+      controls.autoRotate      = false; // user interaction only
+
+      // Fade out the hint after first interaction
+      controls.addEventListener('start', () => { hint.style.opacity = '0'; });
+
+      function addPoints(points) {
+        label.remove();
+        points.geometry.center();
+        points.geometry.computeBoundingSphere();
+        const r = points.geometry.boundingSphere.radius || 1;
+        camera.position.set(0, 0, r * 2.8);
+        controls.update();
+        if (points.material) {
+          points.material.color = new THREE.Color(0x67e8f9);
+          points.material.size  = Math.max(0.002, r * 0.006);
+        }
+        scene.add(points);
+      }
+
+      function addFallbackCloud() {
+        const N   = 18000;
+        const pos = new Float32Array(N * 3);
+        for (let i = 0; i < N; i++) {
+          const phi   = Math.acos(2 * Math.random() - 1);
+          const theta = 2 * Math.PI * Math.random();
+          const r     = 0.85 + Math.random() * 0.15;
+          pos[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
+          pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+          pos[i * 3 + 2] = r * Math.cos(phi);
+        }
+        const geo = new THREE.BufferGeometry();
+        geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+        addPoints(new THREE.Points(geo, new THREE.PointsMaterial({ color: 0x67e8f9, size: 0.018 })));
+      }
+
+      fetch(src)
+        .then(res => { if (!res.ok) throw new Error(); return res.arrayBuffer(); })
+        .then(buf  => { addPoints(new PCDLoader().parse(buf)); })
+        .catch(()  => { addFallbackCloud(); });
+
+      const ro = new ResizeObserver(() => {
+        const w = container.clientWidth, h = container.clientHeight;
+        renderer.setSize(w, h);
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+      });
+      ro.observe(container);
+
+      (function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+      })();
+    }
+
+    document.querySelectorAll('.pointcloud-viewer[data-src]').forEach(initViewer);
+  </script>
+</body>
+</html>

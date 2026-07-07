@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fish Biomass</title>
+
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --accent: #0891b2;
+      --border: #e2e8f0;
+      --dark: #020617;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1100px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 28px 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 44px;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    .back-link {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 32px;
+      margin-bottom: 42px;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: #cffafe;
+      color: #155e75;
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: clamp(38px, 6vw, 62px);
+      line-height: 0.98;
+      letter-spacing: -0.05em;
+      margin-bottom: 18px;
+    }
+
+    .lead {
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .meta-card,
+    .section,
+    .image-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+    }
+
+    .image-card {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Fixed aspect-ratio wrapper keeps all media areas the same shape
+       regardless of the source image's natural dimensions.
+       object-fit: cover crops images to fill without stretching. */
+    .image-card .media-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      border-radius: 24px 24px 0 0;
+      flex-shrink: 0;
+    }
+
+    .image-card .media-wrap img,
+    .image-card .media-wrap .image-placeholder,
+    .image-card .media-wrap .pointcloud-viewer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
+    }
+
+    /* Images: show fully, preserve aspect ratio, no cropping */
+    .image-card .media-wrap img {
+      object-fit: contain;
+      background: #f1f5f9;
+    }
+
+    .meta-card {
+      padding: 18px;
+    }
+
+    .meta-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .section {
+      padding: 28px;
+      margin-bottom: 28px;
+    }
+
+    h2 {
+      font-size: 30px;
+      margin-bottom: 14px;
+      letter-spacing: -0.03em;
+    }
+
+    p {
+      color: #334155;
+    }
+
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .image-placeholder {
+      background: linear-gradient(135deg, #dbeafe, #cffafe);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      color: #475569;
+    }
+
+    .image-card p {
+      padding: 14px 16px 18px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+      margin-top: 18px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 720px;
+    }
+
+    th,
+    td {
+      border: 1px solid var(--border);
+      padding: 14px 16px;
+      text-align: left;
+    }
+
+    thead {
+      background: #f8fafc;
+    }
+
+    th {
+      font-size: 14px;
+      color: #334155;
+    }
+
+    td {
+      font-size: 14px;
+      color: #475569;
+    }
+
+    ul {
+      padding-left: 20px;
+      color: #475569;
+    }
+
+    li {
+      margin-bottom: 10px;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 0;
+      margin-top: 50px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        width: min(100% - 24px, 1100px);
+      }
+
+      .image-grid,
+      .meta-grid {
+        grid-template-columns: 1fr;
+      }
+
+      nav {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+      }
+    }
+
+    .pointcloud-viewer {
+      background: radial-gradient(ellipse at center, #e1e8f2 0%, #e1e2e6 100%);
+      overflow: hidden;
+      cursor: grab;
+      position: relative;
+      flex-shrink: 0;
+      touch-action: none;
+    }
+
+    .pointcloud-viewer:active {
+      cursor: grabbing;
+    }
+
+    .pointcloud-viewer canvas {
+      display: block;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .pointcloud-viewer .pcd-label {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #67e8f9;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      pointer-events: none;
+    }
+
+    .pointcloud-viewer .pcd-hint {
+      position: absolute;
+      bottom: 10px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: rgba(103,232,249,0.55);
+      font-size: 11px;
+      font-weight: 600;
+      pointer-events: none;
+      transition: opacity 0.4s;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <a class="logo" href="../index.html">Ashutosh Singh</a>
+        <a class="back-link" href="../index.html">← Back to projects</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div>
+        <div class="tag">Object Detection · Pose Estimation · Stereo Vision</div>
+        <h1>AI powered Fish Size Measurement</h1>
+        <p class="lead">
+            We developed a computer vision system to measure fish size from stereo camera data.
+            Our method achieves accurate size estimation while being efficient enough 
+            for real-time deployment in aquaculture settings.
+        </p>
+      </div>
+
+      <div class="meta-grid">
+        <div class="meta-card">
+          <strong>Dataset</strong>
+          Fish detection and pose estimation dataset collected from stereo cameras in aquaculture environments.
+        </div>
+
+        <div class="meta-card">
+          <strong>Framework</strong>
+          PyTorch · MMDetection · MMPose 
+        </div>
+
+        <div class="meta-card">
+          <strong>Hardware</strong>
+          A100 GPU
+        </div>
+
+        <div class="meta-card">
+          <strong>Task</strong>
+          Object Detection · Pose Estimation · Stereo Matching
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Problem Statement</h2>
+      <p>
+        Fish size measurement is critical for aquaculture management, but traditional methods are labor-intensive and error-prone.
+        The size of fish can act as a proxy for health and growth, and accurate measurements can help optimize feeding schedules.
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>Method Overview</h2>
+      <p>
+        Faster R-CNN based object detection for fish localization, followed by a top-down pose estimation module to identify keypoints on the fish body 
+        using HR-Net and Hourglass models.
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>Visual Results</h2>
+
+      <div class="image-grid">
+        <div class="image-card">
+          <div class="media-wrap">
+            <img src="../images/fish_size_measurement/stereo-matching.png.jpg">
+          </div>
+          <p>Fish association across frames</p>
+        </div>
+
+        <div class="image-card">
+          <div class="image-placeholder">Image 2</div>
+          <p>Ground Truth Comparison</p>
+        </div>
+
+        <div class="image-card">
+          <div class="image-placeholder">Image 3</div>
+          <p>Failure Case</p>
+        </div>
+
+        <div class="image-card">
+          <div class="image-placeholder">Image 4</div>
+          <p>Feature Visualization</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Quantitative Results - Object Detection</h2>
+      <p>mAP values for object detection methods on our dataset with Faster R-CNN-R50 and R101 backbones.</p>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Method</th>
+              <th>mAP</th>
+              <th>AP50</th>
+              <th>Image Size</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>Faster R-CNN-R50</td>
+              <td>77.20</td>
+              <td>85.80</td>
+              <td>1280x720</td>
+            </tr>
+
+            <tr>
+              <td>Faster R-CNN-R101</td>
+              <td>78.50</td>
+              <td>86.00</td>
+              <td>1280x720</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Quantitative Results - Pose Estimation (top-down)</h2>
+        <p>AP values for pose estimation methods on our dataset with HRNet-32 and Hourglass-52 backbones.</p>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Method</th>
+              <th>AP</th>
+              <th>AP75</th>
+              <th>Image Size</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>HRNet-32</td>
+              <td>75.31</td>
+              <td>94.77</td>
+              <td>384x288</td>
+            </tr>
+
+            <tr>
+              <td>Hourglass-52</td>
+              <td>65.40</td>
+              <td>81.71</td>
+              <td>256x256</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Quantitative Results - Fish association for Stereo Matching</h2>
+        <p>Precision and Recall values for fish association across left and right frames on our dataset.</p>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Method</th>
+              <th>Precision</th>
+              <th>Recall</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>Best-Match</td>
+              <td>81.36</td>
+              <td>77.38</td>
+            </tr>
+
+            <tr>
+              <td>Minimum Cost Assignment</td>
+              <td>90.19</td>
+              <td>82.31</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      
+
+      <h2>Quantitative Results - Length measurement Errors</h2>
+        <p>Length measurement errors for different methods of depth estimation at keypoints. We use ground-truth depth and estimated depths at the keypoints to calculate the errors.</p>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Method</th>
+              <th>Error (cm)</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>Predicted Keypoints + GT Depth</td>
+              <td>1.2</td>
+            </tr>
+
+            <tr>
+              <td>Predicted Keypoints + Estimated Depth</td>
+              <td>17.5</td>
+            </tr>
+            <tr>
+              <td>Predicted Keypoints + Estimated Depth (Disparity >= 50px)</td>
+              <td>1.6</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2></h2>
+
+      <ul>
+        <li>Underwater object detection and pose estimation.</li>
+        <li>Keypoints from pose estimation used for stereo matching.</li>
+        <li>Depth estimation at keypoints and length measurement.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      © 2026 Ashutosh Singh. All rights reserved.
+    </div>
+  </footer>
+</body>
+</html>
